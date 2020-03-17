@@ -8,7 +8,7 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
     this.minLength = 8; //this is what we defined and what we need to consider in our length check
 
     //this attributes are set with our constructor
-    this.wrapperField = $(wrapperId);
+    this.wrapperField = $(wrapperId); // JQuery verwendet "$" statt "document.getElementById();" um auf JQuery zuzugreifen
     this.passwordField = $(passwordInputFieldId);
     this.passwordSubmitButton = $(passwordSubmitButtonId);
 
@@ -28,7 +28,7 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
         that.check();
     });
 
-    this.passwordField.keydown(function() {
+    this.passwordField.keydown(function() { //auf HTML auszuführende Performance; Unterschied JavaScript: .action = function (){}
         that.check();
     });
 
@@ -48,12 +48,12 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
         if(this.wrapperField && this.passwordField && this.passwordSubmitButton) {
             var longEnough = this.checkForLength();
             var hasSpecialChars = this.checkForSpecialCharacters();
-
-            //if it is long enough and has a special character - everything is fine
             if(longEnough && hasSpecialChars) {
+                //if it is long enough and has a special character - everything is fine
                 this.wrapperField.removeClass(this.warningClass + ' ' + this.errorClass).addClass(this.successClass);
                 this.passwordSubmitButton.attr('disabled', false);
             } else if(!hasSpecialChars && longEnough) { //if it is long enough but it has no special character set class warning
+                //statt  this.passwordSubmitButton.disabled = false;
                 this.wrapperField.removeClass(this.successClass + ' ' + this.errorClass).addClass(this.warningClass);
                 this.passwordSubmitButton.attr('disabled', true);
             } else { //if it is not long enough set class error
@@ -77,7 +77,8 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
     this.checkForLength = function() {
         //@todo
         //have a look at javascript string methods and properties
-        return true; //this needs to be replaced!
+        //return true; this needs to be replaced!
+        return this.passwordField.value.length >= this.minLength;
     };
 
     /*
@@ -87,9 +88,9 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
         //@todo
         //have a look at javascript string methods and properties
         //you could probably "match" it somehow
-        return true; //this needs to be replaced!
+        //return true; this needs to be replaced!
+        var regex = /[!§$_.:,;]/;
+        return regex.test(this.passwordField.value);
     };
     //TODO 2 end
 }
-
-
